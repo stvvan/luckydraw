@@ -60,12 +60,23 @@ class RandomEnd(webapp2.RequestHandler):
             random_index = randint(0, len(participants) - 1)
             winner = participants[random_index]
 
-            slack.send("Winner is: {0}, winning number is: {1}".format(winner.user_name, winner.random_number))
+            slack.send("Winner is: {0}, winning number is: {1}".format(winner.user_name, winner.random_number), True)
 
             del participants[:]
             del random_numbers[:]
 
 
+class Verify(webapp2.RequestHandler):
+    def get(self):
+        token = self.request.GET['token']
+
+        if token:
+            self.response.write(slack.verify(token))
+        else:
+            self.response.write('Token is missing')
+
+
 app = webapp2.WSGIApplication([('/', MainHandler),
                                ('/random', Random),
-                               ('/end', RandomEnd)], debug=True)
+                               ('/end', RandomEnd),
+                               ('/verify', Verify)], debug=True)
