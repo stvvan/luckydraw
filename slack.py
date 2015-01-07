@@ -12,5 +12,3 @@ class Slack:
         data = json.dumps(data)
         req = urllib2.Request(self.url, data, {'Content-Type': 'application/json'})
         urllib2.urlopen(req)
-
-

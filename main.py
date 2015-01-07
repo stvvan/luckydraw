@@ -20,6 +20,7 @@ from random import randint
 from slack import Slack
 
 participants = []
+random_numbers = []
 slack = Slack()
 
 
@@ -33,27 +34,21 @@ class Random(webapp2.RequestHandler):
         token = self.request.POST['token']
 
         if token == 'MWy79kmxOFunjxrcDMNt1y6a':
-            random_number = self.request.POST['text']
             user_name = self.request.POST['user_name']
 
-            if not self.is_int(random_number):
-                slack.send("User {0} picked invalid number. Noobs!".format(user_name))
-            else:
-                user_id = self.request.POST['user_id']
-                participant = Participants(user_id, user_name, random_number)
+            user_id = self.request.POST['user_id']
 
-                if participant in participants:
-                    slack.send("User {0} already picked. Cheater!".format(user_name))
-                else:
-                    participants.append(participant)
-                    slack.send("User {0} picked number: {1}".format(user_name, random_number))
+            random_number = randint(0, 100)
+            while random_number in random_numbers:
+                random_number = randint(0, 100)
 
-    def is_int(self, number):
-        try:
-            int(number)
-            return True
-        except ValueError:
-            return False
+            random_numbers.append(random_number)
+
+            participant = Participants(user_id, user_name, random_number)
+
+            if participant not in participants:
+                participants.append(participant)
+                slack.send("User {0} is assigned this number: {1}".format(user_name, random_number))
 
 
 class RandomEnd(webapp2.RequestHandler):
@@ -66,7 +61,9 @@ class RandomEnd(webapp2.RequestHandler):
             winner = participants[random_index]
 
             slack.send("Winner is: {0}, winning number is: {1}".format(winner.user_name, winner.random_number))
+
             del participants[:]
+            del random_numbers[:]
 
 
 app = webapp2.WSGIApplication([('/', MainHandler),
