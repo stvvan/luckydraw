@@ -23,6 +23,9 @@ participants = []
 random_numbers = []
 slack = Slack()
 
+MIN = 1000
+MAX = 9999
+
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
@@ -38,9 +41,9 @@ class Random(webapp2.RequestHandler):
 
             user_id = self.request.POST['user_id']
 
-            random_number = randint(0, 100)
+            random_number = randint(MIN, MAX)
             while random_number in random_numbers:
-                random_number = randint(0, 100)
+                random_number = randint(MIN, MAX)
 
             random_numbers.append(random_number)
 
