@@ -16,7 +16,7 @@ class Bid(webapp2.RequestHandler):
         prices.append(randint(MIN, MAX))
         token = self.request.POST['token']
 
-        if token == 'OA6ggjGkG47scdbZQ0BqEuD3':
+        if token == '':
             user_name = self.request.POST['user_name']
             user_id = self.request.POST['user_id']
 
@@ -51,7 +51,7 @@ class BidEnd(webapp2.RequestHandler):
 
         if user_name == 'steve':
             winner = self.determine_winner()
-            slack.send("Price is {0}. Winning amount is: {1} and winner is: {2}".format(prices[0],
+            slack.send("Price is {0}. Winning amount is: {1} and winner is: {2}. Congratulations!".format(prices[0],
                                                                                                  winner.random_number,
                                                                                                  winner.user_name),
                        True)
@@ -69,3 +69,14 @@ class BidEnd(webapp2.RequestHandler):
                 winner = participant
 
         return winner
+
+
+class BidClear(webapp2.RequestHandler):
+    def post(self):
+
+        user_name = self.request.POST['user_name']
+
+        if user_name == 'steve':
+            del participants[:]
+            del prices[:]
+            slack.send("Bidding data has been cleared.")

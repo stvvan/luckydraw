@@ -7,7 +7,7 @@ class Slack:
 
     def __init__(self):
         #insert slack url
-        self.url = '***'
+        self.url = ''
         self.encrypter = Encryption()
 
     def send(self, text, hashing=False):

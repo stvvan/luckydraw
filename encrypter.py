@@ -12,7 +12,7 @@ class Encryption:
 
     def __init__(self):
         #insert secret key here
-        self.cipher = AES.new('000')
+        self.cipher = AES.new('1234567876543211')
 
     def encrypt(self, text):
         return EncodeAES(self.cipher, text)

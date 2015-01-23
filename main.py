@@ -15,11 +15,9 @@
 # limitations under the License.
 #
 import webapp2
-from random_number import Random
-from random_number import RandomEnd
+from random_number import Random, RandomEnd
 from encrypter import Encryption
-from bid import Bid
-from bid import BidEnd
+from bid import Bid, BidEnd, BidClear
 
 decrypter = Encryption()
 
@@ -44,4 +42,5 @@ app = webapp2.WSGIApplication([('/', MainHandler),
                                ('/end', RandomEnd),
                                ('/verify', Verify),
                                ('/bid', Bid),
-                               ('/bidend', BidEnd)], debug=True)
+                               ('/bidend', BidEnd),
+                               ('/bidclear', BidClear)], debug=True)
