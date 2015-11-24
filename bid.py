@@ -60,7 +60,7 @@ class BidEnd(webapp2.RequestHandler):
 
     @staticmethod
     def determine_winner():
-        lowest = MAX
+        lowest = MAX - participants[0].random_number
         winner = None
         for participant in participants:
             diff = prices[0] - participant.random_number
