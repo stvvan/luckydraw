@@ -64,7 +64,11 @@ class BidEnd(webapp2.RequestHandler):
         winner = None
         for participant in participants:
             diff = prices[0] - participant.random_number
-            if 0 <= diff <= lowest:
+
+            if diff == 0:
+                return participant
+
+            if 0 < diff <= lowest:
                 lowest = diff
                 winner = participant
 
