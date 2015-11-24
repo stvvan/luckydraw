@@ -7,7 +7,7 @@ participants = []
 prices = []
 slack = Slack()
 
-MIN = 500000
+MIN = 1
 MAX = 10000000
 
 
@@ -27,6 +27,7 @@ class Bid(webapp2.RequestHandler):
 
                 if participant in participants:
                     participant.random_number = float(bid_amount)
+                    participants[participants.index(participant)] = participant
                     slack.send("User {0} updates his bid to {1}".format(participant.user_name, bid_amount))
                 else:
                     if any(participant.random_number == float(bid_amount) for participant in participants):
