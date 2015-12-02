@@ -10,10 +10,16 @@ slack = Slack()
 MIN = 1
 MAX = 10000000
 
+class BidStart(webapp2.RequestHandler):
+    def post(self):
+        user_name = self.request.POST['user_name']
+
+        if user_name == 'steve':
+            prices.append(randint(MIN, MAX))
+            slack.send("Bidding round has started!")        
 
 class Bid(webapp2.RequestHandler):
     def post(self):
-        prices.append(randint(MIN, MAX))
         token = self.request.POST['token']
 
         if token == '':
@@ -47,12 +53,15 @@ class Bid(webapp2.RequestHandler):
 
 class BidEnd(webapp2.RequestHandler):
     def post(self):
-
         user_name = self.request.POST['user_name']
 
         if user_name == 'steve':
             winner = self.determine_winner()
-            slack.send("Price is {0}. Winning amount is: {1} and winner is: {2}. Congratulations!".format(prices[0],
+
+            if winner is None:
+                slack.send("Price is {0}. All bids are higher than price. There's no winner".format(prices[0]))
+            else:
+                slack.send("Price is {0}. Winning amount is: {1} and winner is: {2}. Congratulations!".format(prices[0],
                                                                                                  winner.random_number,
                                                                                                  winner.user_name),
                        True)
@@ -61,17 +70,20 @@ class BidEnd(webapp2.RequestHandler):
 
     @staticmethod
     def determine_winner():
-        lowest = MAX - participants[0].random_number
         winner = None
-        for participant in participants:
-            diff = prices[0] - participant.random_number
 
-            if diff == 0:
-                return participant
+        if participants:
+            lowest = MAX - participants[0].random_number
+        
+            for participant in participants:
+                diff = prices[0] - participant.random_number
 
-            if 0 < diff <= lowest:
-                lowest = diff
-                winner = participant
+                if diff == 0:
+                    return participant
+
+                if 0 < diff < lowest:
+                    lowest = diff
+                    winner = participant
 
         return winner
 

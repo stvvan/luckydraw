@@ -17,7 +17,7 @@
 import webapp2
 from random_number import Random, RandomEnd
 from encrypter import Encryption
-from bid import Bid, BidEnd, BidClear
+from bid import Bid, BidStart, BidEnd, BidClear
 
 decrypter = Encryption()
 
@@ -41,6 +41,7 @@ app = webapp2.WSGIApplication([('/', MainHandler),
                                ('/random', Random),
                                ('/end', RandomEnd),
                                ('/verify', Verify),
+                               ('/bidstart', BidStart),
                                ('/bid', Bid),
                                ('/bidend', BidEnd),
                                ('/bidclear', BidClear)], debug=True)
