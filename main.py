@@ -15,7 +15,6 @@
 # limitations under the License.
 #
 import webapp2
-from random_number import Random, RandomEnd
 from encrypter import Encryption
 from bid import Bid, BidStart, BidEnd, BidClear
 
@@ -38,8 +37,6 @@ class Verify(webapp2.RequestHandler):
 
 
 app = webapp2.WSGIApplication([('/', MainHandler),
-                               ('/random', Random),
-                               ('/end', RandomEnd),
                                ('/verify', Verify),
                                ('/bidstart', BidStart),
                                ('/bid', Bid),

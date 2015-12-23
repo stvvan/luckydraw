@@ -9,12 +9,14 @@ slack = Slack()
 
 MIN = 1
 MAX = 10000000
+ADMIN_NAME = ''
+TOKEN = ''
 
 class BidStart(webapp2.RequestHandler):
     def post(self):
         user_name = self.request.POST['user_name']
 
-        if user_name == 'steve':
+        if user_name == ADMIN_NAME:
             prices.append(randint(MIN, MAX))
             slack.send("Bidding round has started!")        
 
@@ -22,7 +24,7 @@ class Bid(webapp2.RequestHandler):
     def post(self):
         token = self.request.POST['token']
 
-        if token == '':
+        if token == TOKEN:
             user_name = self.request.POST['user_name']
             user_id = self.request.POST['user_id']
 
@@ -55,7 +57,7 @@ class BidEnd(webapp2.RequestHandler):
     def post(self):
         user_name = self.request.POST['user_name']
 
-        if user_name == 'steve':
+        if user_name == ADMIN_NAME:
             winner = self.determine_winner()
 
             if winner is None:
@@ -93,7 +95,7 @@ class BidClear(webapp2.RequestHandler):
 
         user_name = self.request.POST['user_name']
 
-        if user_name == 'steve':
+        if user_name == ADMIN_NAME:
             del participants[:]
             del prices[:]
             slack.send("Bidding data has been cleared.")
